@@ -1,0 +1,69 @@
+openapi: '3.0.2'
+info:
+  title: API Title
+  version: '1.0'
+servers:
+  - url: https://api.server.test/v1
+paths:
+  /game/{game-id}/{session-id}:
+    post:
+      parameters:
+        - in: path
+          name: game-id
+          schema:
+            type: string
+          required: true
+          description: game-id is the game type, let say 3-in-a-row, snake, pac-man
+        - in: path
+          name: session-id
+          schema:
+            type: string
+          required: true
+          description: the session, the server must handle server games simultaneously. This parameter select the gaming session. 
+                       If the session does not exist a new one will be created.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/controller"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:              
+                $ref: "#/components/schemas/output"
+components:
+  schemas:
+    screen:
+      description: the game screen 256:256, 256 color depth 3 bits Red, 3 bits Green, 2 bit Blue.
+      properties:
+        pixels:
+          type: array
+          items:
+            type: number
+    output:
+      properties:
+        score:
+          type: number
+        screen:
+          $ref: "#/components/schemas/screen"
+    controller:
+      description: the game controller, like the PlayStation controller.. 0 if the button is not pressed, 1 if is pressed
+      properties:
+        left:
+          type: number
+        right:
+          type: number
+        down:
+          type: number
+        up:
+          type: number
+        x:
+          type: number
+        y:
+          type: number
+        a:
+          type: number
+        b: 
+          type: number
